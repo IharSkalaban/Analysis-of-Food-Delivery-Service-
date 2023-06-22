@@ -1,0 +1,29 @@
+WITH  successful as (
+        SELECT date_part('hour', creation_time)::int as hour,
+                COUNT(order_id) successful_orders
+        FROM orders
+        WHERE order_id IN (
+            SELECT order_id
+            FROM courier_actions
+            WHERE  action = 'deliver_order'
+        )
+        GROUP BY hour
+        ORDER BY hour
+),
+cancel as (
+        SELECT date_part('hour', creation_time)::int as hour,
+                COUNT(order_id) canceled_orders
+        FROM orders
+        WHERE order_id IN (
+            SELECT order_id
+            FROM user_actions
+            WHERE  action = 'cancel_order'
+        )
+        GROUP BY hour
+        ORDER BY hour
+)
+
+SELECT s.hour, s.successful_orders, c.canceled_orders,
+       round((c.canceled_orders::decimal / (s.successful_orders + c.canceled_orders)),3)  as  cancel_rate
+FROM  successful s
+JOIN  cancel c ON s.hour = c.hour

@@ -1,0 +1,54 @@
+WITH orders_total  as ( 
+    SELECT date_trunc('day', time)::date as date, COUNT(order_id) as orders
+    FROM user_actions
+    WHERE order_id NOT IN (SELECT order_id FROM user_actions WHERE action = 'cancel_order')
+    GROUP BY date
+    ORDER BY date
+    ),
+
+first_orders_count as (
+        SELECT date , COUNT(DISTINCT user_id ) as first_orders
+        FROM (
+            SELECT date_trunc('day', time)::date as date, user_id, order_id,
+                   MIN(date_trunc('day', time)::date) OVER (PARTITION BY user_id ) date_of_first_order
+            FROM user_actions
+            WHERE order_id NOT IN (SELECT order_id FROM user_actions WHERE action = 'cancel_order')
+        ) t2
+        WHERE date = date_of_first_order
+        GROUP BY date
+        ORDER BY date
+
+    ),
+new_users_orders_count AS (
+    SELECT t1.date, SUM(t2.orders_per_day)::int AS new_users_orders
+    FROM (
+        SELECT user_id, MIN(time::date) AS date
+        FROM user_actions
+        GROUP BY user_id
+    ) AS t1
+    LEFT JOIN (
+        SELECT time::date AS date, user_id, COUNT(user_id) AS orders_per_day
+        FROM user_actions
+        WHERE order_id NOT IN (
+            SELECT order_id
+            FROM user_actions
+            WHERE action = 'cancel_order'
+        )
+        GROUP BY time::date, user_id
+    ) AS t2 ON t1.user_id = t2.user_id AND t1.date = t2.date
+    GROUP BY t1.date
+    ORDER BY date
+)
+
+SELECT
+    ot.date,
+    ot.orders,
+    fo.first_orders,
+    nuoc.new_users_orders,
+    ROUND(100 * fo.first_orders::decimal / ot.orders, 2) AS first_orders_share,
+    ROUND(100 * nuoc.new_users_orders::decimal / ot.orders, 2) AS new_users_orders_share
+FROM
+    orders_total ot
+LEFT JOIN first_orders_count fo ON ot.date = fo.date
+LEFT JOIN new_users_orders_count nuoc ON ot.date = nuoc.date
+ORDER BY ot.date
