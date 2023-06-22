@@ -1,0 +1,18 @@
+WITH paid_users as (
+    SELECT date,
+           COUNT(user_id) FILTER (WHERE order_day = 1) as make_single_order , 
+           COUNT(user_id) FILTER (WHERE order_day =2) as make_several_order,
+           COUNT(DISTINCT user_id) paying_users
+    FROM (
+        SELECT user_id, COUNT(order_id) order_day, date_trunc('day', time)date date
+        FROM user_actions
+        WHERE order_id NOT IN (SELECT order_id FROM user_actions WHERE action = 'cancel_order')
+        GROUP BY date, user_id
+        ORDER BY date, user_id
+    ) t1
+    GROUP BY date
+    )
+SELECT  date,
+        round((make_single_orderdecimal  paying_users 100),2) single_order_users_share,
+        round((make_several_orderdecimal  paying_users 100),2) several_orders_users_share
+FROM paid_users
