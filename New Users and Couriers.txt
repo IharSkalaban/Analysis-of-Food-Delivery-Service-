@@ -1,0 +1,31 @@
+WITH new_users AS (
+    SELECT date, COUNT(DISTINCT user_id) AS new_users
+    FROM (
+        SELECT user_id, MIN(time)::date AS date
+        FROM user_actions
+        GROUP BY user_id
+    ) t1
+    GROUP BY date
+),
+new_couriers AS (
+    SELECT date, COUNT(DISTINCT courier_id) AS new_couriers
+    FROM (
+        SELECT courier_id, MIN(time)::date AS date
+        FROM courier_actions
+        GROUP BY courier_id
+    ) t2
+    GROUP BY date
+),
+query AS (
+    SELECT new_couriers.date AS date, new_users.new_users, new_couriers.new_couriers,
+           SUM(new_users.new_users) OVER (ORDER BY new_couriers.date)::int AS total_users,
+           SUM(new_couriers.new_couriers) OVER (ORDER BY new_couriers.date)::int AS total_couriers
+    FROM new_users
+    JOIN new_couriers ON new_users.date = new_couriers.date
+)
+SELECT query.date, query.new_users, query.new_couriers, query.total_users, query.total_couriers,
+       ROUND((query.new_users - LAG(query.new_users) OVER (ORDER BY query.date)) * 100::decimal / LAG(query.new_users) OVER (ORDER BY query.date), 2) AS new_users_change,
+       ROUND((query.new_couriers - LAG(query.new_couriers) OVER (ORDER BY query.date)) * 100::decimal / LAG(query.new_couriers) OVER (ORDER BY query.date), 2) AS new_couriers_change,
+       ROUND((query.total_users - LAG(query.total_users) OVER (ORDER BY query.date)) * 100::decimal / LAG(query.total_users) OVER (ORDER BY query.date), 2) AS total_users_growth,
+       ROUND((query.total_couriers - LAG(query.total_couriers) OVER (ORDER BY query.date)) * 100::decimal / LAG(query.total_couriers) OVER (ORDER BY query.date), 2) AS total_couriers_growth
+FROM query
