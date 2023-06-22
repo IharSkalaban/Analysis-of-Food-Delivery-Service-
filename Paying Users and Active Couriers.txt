@@ -1,0 +1,48 @@
+WITH users AS (
+    SELECT date, COUNT(DISTINCT user_id) paying_users
+    FROM (
+        SELECT user_id, order_id, date_trunc('day', time)::date date
+        FROM user_actions
+        WHERE order_id NOT IN (SELECT order_id FROM user_actions WHERE action = 'cancel_order')
+        GROUP BY user_id, order_id, date
+        ORDER BY 1,3,2
+    ) t3
+    GROUP BY date
+),
+couriers AS (
+    SELECT date, COUNT(DISTINCT courier_id) active_couriers
+    FROM (
+        SELECT courier_id, order_id, date_trunc('day', time)::date date
+        FROM courier_actions
+        WHERE order_id IN (SELECT order_id FROM courier_actions WHERE action = 'deliver_order')
+        GROUP BY courier_id, order_id, date
+        ORDER BY 1,3,2
+    ) t4
+    GROUP BY date
+),
+total AS (
+    SELECT
+        t1.date,
+        SUM(COUNT(DISTINCT user_id)) OVER (ORDER BY t1.date)::int AS total_users,
+        SUM(COUNT(DISTINCT courier_id)) OVER (ORDER BY t1.date)::int AS total_couriers
+    FROM
+        (SELECT user_id, MIN(time)::date AS date FROM user_actions GROUP BY user_id) t1
+    JOIN
+        (SELECT courier_id, MIN(time)::date AS date FROM courier_actions GROUP BY courier_id) t2
+    ON
+        t1.date = t2.date
+    GROUP BY
+        t1.date
+)
+SELECT
+    users.date,
+    users.paying_users,
+    couriers.active_couriers,
+    round((users.paying_users::decimal / total.total_users * 100),2) AS paying_users_share,
+    round((couriers.active_couriers::decimal / total.total_couriers * 100),2) AS active_couriers_share
+FROM
+    users
+JOIN
+    couriers ON users.date = couriers.date
+JOIN
+    total ON couriers.date = total.date
