@@ -1,8 +1,13 @@
-##  In this repository we use test data from the " Food delivery service":
+##  In this repository we use test data from the " Food delivery service"
 * I want to analyze  and calculate several important indicators using only SQL that characterize its performance
 * Visualize the obtained values with the integrated Redash interface and compile the final dashboard
 
 I will place the solution for each task in individual .txt files
+
+***
+**↓↓↓** **Let's put all the graphs from the data study on one dashboard** **↓↓↓** 
+
+[Analysis of the delivery service indicators](http://redash.public.karpov.courses/public/dashboards/XBAhoODgM10AZrzBngylXnqy6X4IShKizJRtZqng?org_slug=default)
 ***
 ### Database schema
 
@@ -145,3 +150,4 @@ Based on the data in the table orders for each hour in a day, calculate the foll
 [1-3] [Orders by Hours](http://redash.public.karpov.courses/embed/query/21534/visualization/32843?api_key=gI5QW7bRyCFYx7TqY1RgMsn4YXUgFXJJQ9on63ue&)
 
 The solution can be found in this [file](https://github.com/IharSkalaban/Analysis-of-Food-Delivery-Service-/blob/main/Order%20by%20Hours.txt)
+
