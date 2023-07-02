@@ -106,7 +106,7 @@ For each day presented in the user_actions table, calculate the following indica
 The solution can be found in this [file](https://github.com/IharSkalaban/Analysis-of-Food-Delivery-Service-/blob/main/Orders%2C%20First%20Orders%20and%20Orders%20from%20New%20Users.txt)
 
 ***
-Case Study 5
+### Case Study 5
 
 Now let's try to roughly estimate the load on our couriers and find out how many orders and users on average account for each of them.
 
@@ -122,7 +122,7 @@ Based on the data in the user_actions, courier_actions, and orders tables, count
 The solution can be found in this [file](https://github.com/IharSkalaban/Analysis-of-Food-Delivery-Service-/blob/main/Users%20and%20Orders%20per%20Couriers.txt)
 
 ***
-Case Study 6
+### Case Study 6
 
 Let's calculate another useful indicator characterizing the quality of couriers.
 
@@ -135,7 +135,7 @@ Based on the data in the courier_actions table for each day, calculate how many 
 The solution can be found in this [file](https://github.com/IharSkalaban/Analysis-of-Food-Delivery-Service-/blob/main/Average%20Delivery%20Time.txt)
 
 ***
-Case Study 7
+### Case Study 7
 
 And finally, let's estimate the hourly load on our service, find out during which hours users place the most orders, and at the same time analyze how the share of cancellations changes depending on the time of order placement.
 
