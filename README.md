@@ -7,7 +7,7 @@ I will place the solution for each task in individual .txt files
 ***
 **↓↓↓** **Let's put all the graphs from the data study on one dashboard** **↓↓↓** 
 
-[Analysis of the delivery service indicators](http://redash.public.karpov.courses/public/dashboards/XBAhoODgM10AZrzBngylXnqy6X4IShKizJRtZqng?org_slug=default)
+[Analysis of the delivery service indicators - part 1](http://redash.public.karpov.courses/public/dashboards/XBAhoODgM10AZrzBngylXnqy6X4IShKizJRtZqng?org_slug=default)
 ***
 ### Database schema
 
