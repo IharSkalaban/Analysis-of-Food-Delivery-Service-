@@ -1,3 +1,6 @@
+###  Part 2, where I'll calculate the Product Metrics is [here](https://github.com/IharSkalaban/Analysis-of-Food-Delivery-Service-part2)
+
+
 ##  In this repository we use test data from the " Food delivery service"
 * I want to analyze  and calculate several important indicators using only SQL that characterize its performance
 * Visualize the obtained values with the integrated Redash interface and compile the final dashboard
