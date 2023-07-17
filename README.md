@@ -1,4 +1,4 @@
-###  Part 2, where I'll calculate the Product Metrics is [here](https://github.com/IharSkalaban/Analysis-of-Food-Delivery-Service-part2)
+
 
 
 ##  In this repository we use test data from the " Food delivery service"
@@ -11,6 +11,9 @@ I will place the solution for each task in individual .txt files
 **↓↓↓** **Let's put all the graphs from the data study on one dashboard** **↓↓↓** 
 
 [Analysis of the delivery service indicators - part 1](http://redash.public.karpov.courses/public/dashboards/XBAhoODgM10AZrzBngylXnqy6X4IShKizJRtZqng?org_slug=default)
+***
+
+###  Part 2, where I'll calculate the Product Metrics is [here](https://github.com/IharSkalaban/Analysis-of-Food-Delivery-Service-part2)
 ***
 ### Database schema
 
